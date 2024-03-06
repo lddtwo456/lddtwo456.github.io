@@ -16,6 +16,8 @@
         <button type="submit">Submit</button>
     </form>
 
+    <p id="out">text</p>
+
     <script>
         document.getElementById('dataForm').addEventListener('submit', function(event) {
             event.preventDefault();
@@ -25,7 +27,7 @@
                 jsonData[key] = value;
             });
             const jsonString = JSON.stringify(jsonData);
-            console.log(jsonString);
+            document.querySelector("#out").textContent = jsonString;
         });
     </script>
 </body>
