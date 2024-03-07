@@ -10,11 +10,15 @@ document.getElementById("dataForm").addEventListener("submit", function(event) {
 });
 
 document.getElementById("field").addEventListener("click", function(event) {
-  var fieldContainer = document.getElementById("field-container");
   var field = document.getElementById("field");
 
   // get click pos rel to container
+  var rect = field.getBoundingClientRect();
+  var x_pos = event.clientX - rect.left;
+  var y_pos = event.clientY - rect.top;
+
   document.getElementById("xout").textContent = event.clientX;
   document.getElementById("yout").textContent = event.clientY;
-  document.getElementById("test").innerHTML = "Click!";
+  console.log(x_pos);
+  console.log(y_pos);
 });
