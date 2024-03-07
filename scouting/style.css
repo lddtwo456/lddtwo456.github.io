@@ -14,3 +14,11 @@ body {
   height: 100%;
   cursor: pointer;
 }
+
+#field-buttons {
+  display: flex;
+}
+
+#field-buttons button{
+  margin-right: 5px;
+}
