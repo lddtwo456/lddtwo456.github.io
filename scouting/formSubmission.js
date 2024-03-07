@@ -1,22 +1,30 @@
-document.getElementById('dataForm').addEventListener('submit', function(event) {
+document.getElementById("dataForm").addEventListener("submit", function(event) {
   event.preventDefault();
-  const formData = new FormData(this);
-  const jsonData = {};
+  let formData = new FormData(this);
+  let jsonData = {};
   formData.forEach((value, key) => {
       jsonData[key] = value;
   });
-  const jsonString = JSON.stringify(jsonData);
+  let jsonString = JSON.stringify(jsonData);
   document.querySelector("#out").textContent = jsonString;
 });
 
-//picture clicker
-document.addEventListener("DOMContentLoaded", function() {
-  var clickableArea = document.getElementById("clickable-area");
+document.addEventListener("DOMContentLoaded", function(event) {
+  var fieldContainer = document.getElementById("field-container");
+  var field = fieldContainer.querySelector("field");
 
-  clickableArea.addEventListener("click", function(event) {
-      var x = event.offsetX;
-      var y = event.offsetY;
+  field.addEventListener("click", function(event) {
+    // get click pos rel to container
+    var rect = fieldContainer.getBoundingClientRect();
+    var offsetX = event.clientX - rect.left;
+    var offsetY = event.clientY - rect.top;
 
-      document.querySelector("#xyout").textContent = String(x+" "+y)
-  });
+    // get position of click rel to image
+    var imageX = offsetX / rect.width * field.naturalWidth;
+    var imageY = offsetY / rect.height * field.naturalHeight;
+
+    // out
+    document.querySelector("#xout").textContent = imageX;
+    document.querySelector("#yout").textContent = imageY;
+  })
 });
