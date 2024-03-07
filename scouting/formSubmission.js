@@ -11,7 +11,7 @@ document.getElementById("dataForm").addEventListener("submit", function(event) {
 
 document.getElementById("field").addEventListener("click", function(event) {
   var fieldContainer = document.getElementById("field-container");
-  var field = fieldContainer.getElementsById("field");
+  var field = fieldContainer.getElementById("field");
 
   // get click pos rel to container
   document.getElementById("xout").textContent = event.clientX;
