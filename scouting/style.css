@@ -15,10 +15,13 @@ body {
   cursor: pointer;
 }
 
-#field-buttons {
-  display: flex;
+#field-selector {
+  text-align: center;
 }
 
-#field-buttons button{
-  margin-right: 5px;
+#field-buttons button {
+  align-self: center;
+  display: inline-block;
+  vertical-align: top;
+  height: 40px;
 }

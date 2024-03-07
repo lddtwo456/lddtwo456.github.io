@@ -21,8 +21,8 @@ document.getElementById("field").addEventListener("click", function(event) {
   let x_pos = event.clientX - rect.left;
   let y_pos = event.clientY - rect.top;
 
-  document.getElementById("xout").textContent = event.clientX;
-  document.getElementById("yout").textContent = event.clientY;
+  document.getElementById("xout").textContent = x_pos;
+  document.getElementById("yout").textContent = y_pos;
   console.log(x_pos);
   console.log(y_pos);
 });
