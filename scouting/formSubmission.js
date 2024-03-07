@@ -9,6 +9,10 @@ document.getElementById("dataForm").addEventListener("submit", function(event) {
   document.getElementById("out").textContent = jsonString;
 });
 
+// selection
+
+
+// placement
 document.getElementById("field").addEventListener("click", function(event) {
   let field = document.getElementById("field");
 
