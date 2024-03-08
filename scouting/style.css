@@ -24,20 +24,18 @@ body {
 #field-buttons button {
   width: 100%;
   height: 40px;
-  background-color: rgb(216, 216, 216); /* Set default background color */
-  color: cornflowerblue; /* Set text color */
-  border: none; /* Remove default button border */
-  text-align: center; /* Center the text horizontally */
-  text-decoration: none; /* Remove default underline */
-  display: inline-block; /* Make the button a block element */
-  font-size: 16px; /* Set font size */
-  cursor: pointer; /* Show pointer cursor on hover */
-  border-radius: 10px; /* Set border radius to make the button rounded */
+  background-color: rgb(216, 216, 216);
+  color: cornflowerblue;
+  border: none;
+  display: inline-block;
+  border-radius: 10px;
   margin: 5px;
 
+  text-align: center;
+  text-decoration: none;
   font-family: Verdana;
   font-weight: bolder;
-  font-family: 30px;
+  font-size: 30px;
 }
 
 #field-buttons button.active {
