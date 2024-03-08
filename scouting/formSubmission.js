@@ -1,16 +1,28 @@
-document.getElementById("dataForm").addEventListener("submit", function(event) {
-  event.preventDefault();
-  let formData = new FormData(this);
-  let jsonData = {};
-  formData.forEach((value, key) => {
-      jsonData[key] = value;
-  });
-  let jsonString = JSON.stringify(jsonData);
-  document.getElementById("out").textContent = jsonString;
+// selection
+const make = document.getElementById("make");
+const miss = document.getElementById("miss");
+const intake = document.getElementById("intake");
+
+make.addEventListener("click", function() {
+  console.log("make!");
+  make.classList.add("active");
+  miss.classList.remove("active");
+  intake.classList.remove("active");
 });
 
-// selection
+miss.addEventListener("click", function() {
+  console.log("miss!");
+  make.classList.remove("active");
+  miss.classList.add("active");
+  intake.classList.remove("active");
+});
 
+intake.addEventListener("click", function() {
+  console.log("intake!");
+  make.classList.remove("active");
+  miss.classList.remove("active");
+  intake.classList.add("active");
+});
 
 // placement
 document.getElementById("field").addEventListener("click", function(event) {
