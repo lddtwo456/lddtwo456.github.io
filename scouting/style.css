@@ -2,20 +2,23 @@ body {
   background-color: rgb(255, 255, 255);
 }
 
-#picture-container {
+#field-selector {
   position: relative;
+  width: 100%;
+  height: auto;
 }
 
-#clickable-area {
+#field {
   position: absolute;
-  top: 0;
+  top: 100px;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: auto;
   cursor: pointer;
 }
 
 #field-buttons {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -23,7 +26,7 @@ body {
 
 #field-buttons button {
   width: 100%;
-  height: 40px;
+  height: 90px;
   background-color: rgb(216, 216, 216);
   color: cornflowerblue;
   border: none;
@@ -35,7 +38,7 @@ body {
   text-decoration: none;
   font-family: Verdana;
   font-weight: bolder;
-  font-size: 22px;
+  font-size: 44px;
 }
 
 #field-buttons button.active {
