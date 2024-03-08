@@ -1,3 +1,6 @@
+// oh no don't steal my google sheets
+const id = "220176127667-eeenbtli386ib8os911inr0eh8nkjqjr.apps.googleusercontent.com";
+
 // selection
 const make = document.getElementById("make");
 const miss = document.getElementById("miss");
