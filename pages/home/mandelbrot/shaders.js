@@ -12,6 +12,7 @@ export var shaders = {
     uniform vec3 camera;
     uniform ivec2 screen;
     uniform int iterations;
+    uniform highp sampler2D referenceIterations;
 
     out vec4 fragColor;
 
@@ -22,15 +23,18 @@ export var shaders = {
 
     void main() {
       int i = 0;
-      vec2 z = vec2(0, 0);
+      vec2 d = vec2(0, 0);
+      vec2 sampledReference = texture(referenceIterations, vec2(0, 0)).rg;
       vec2 windowSize = 2.0*vec2(screen)/(camera.z*float(screen.y));
-      vec2 c = camera.xy + (windowSize * (gl_FragCoord.xy - vec2(screen)/2.0) / float(screen.y));
-      while(length(z) < 2.0 && i < iterations) {
-        z = vec2(z.x*z.x - z.y*z.y, 2.0*z.x*z.y);
-        z += c;
+      vec2 c = windowSize * (gl_FragCoord.xy - vec2(screen)/2.0) / float(screen.y);
+      while(length(d+sampledReference) < 2.0 && i < iterations) {
+        sampledReference = texture(referenceIterations, vec2(i, 0)).rg;
+        d = 2.0*vec2(sampledReference.x*d.x - sampledReference.y*d.y, sampledReference.x*d.y + sampledReference.y*d.x) + vec2(d.x*d.x - d.y*d.y, 2.0*d.x*d.y) + c;
+        d += c;
         i += 1;
       }
-
+      
+      vec2 z = texture(referenceIterations, vec2(0, 0)).rg + d;
       float fractionalIterations = float(i) - log(log(length(z)))/log(2.0);
 
       if (i < iterations) {

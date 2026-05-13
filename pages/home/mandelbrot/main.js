@@ -1,5 +1,8 @@
 import { shaders } from "./shaders.js";
+import { getIterations } from "./orbitCalculator.js";
 import BigNumber from "https://cdn.jsdelivr.net/npm/bignumber.js@latest/+esm"
+
+const SET_ITERATIONS = 1000;
 
 main();
 
@@ -23,7 +26,17 @@ function main() {
       screen: gl.getUniformLocation(shaderProgram, "screen"),
       iterations: gl.getUniformLocation(shaderProgram, "iterations"),
     },
+    iterationsTex: gl.createTexture(),
   };
+
+  gl.bindTexture(gl.TEXTURE_2D, programInfo.iterationsTex);
+  gl.texStorage2D(
+    gl.TEXTURE_2D,
+    1,
+    gl.RG32F,
+    4096,
+    1
+  );
 
   const vertBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, vertBuffer);
@@ -36,11 +49,6 @@ function main() {
      1.0,  1.0
   ]);
   gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
-
-  // First draw
-  gl.clearColor(0.0, 0.0, 0.0, 1.0);
-  gl.clear(gl.COLOR_BUFFER_BIT);
-
   gl.vertexAttribPointer(
     programInfo.attribLocations.vertexPosition,
     2,
@@ -52,9 +60,10 @@ function main() {
   gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 
   gl.useProgram(programInfo.program);
+  gl.clearColor(0.0, 0.0, 0.0, 1.0);
   
   let camera = [new BigNumber(-0.75), new BigNumber(0.0), 1.0];
-  drawScreen(gl, programInfo, camera, [canvas.clientWidth, canvas.clientHeight], 1000);
+  draw(gl, programInfo, camera, [canvas.clientWidth, canvas.clientHeight], SET_ITERATIONS);
 
   // Set up inputs
   let mouseCenter = [new BigNumber(0.0), new BigNumber(0.0)];
@@ -66,6 +75,7 @@ function main() {
     const windowSize = [new BigNumber(canvas.clientWidth).dividedBy(camera[2]*canvas.clientHeight/2), new BigNumber(canvas.clientHeight).dividedBy(camera[2]*canvas.clientHeight/2)]
     const mouseGraphPos = [camera[0].plus(windowSize[0].multipliedBy(centerRelative[0] / canvas.clientHeight)), camera[1].plus(windowSize[1].multipliedBy(centerRelative[1] / canvas.clientHeight))];
 
+    console.log(`${mouseGraphPos[0].toPrecision(20)}, ${mouseGraphPos[1].toPrecision(20)}`);
     mouseCenter = mouseGraphPos;
   });
   canvas.addEventListener("wheel", (e) => {
@@ -78,12 +88,26 @@ function main() {
     camera[0] = camera[0].minus(mouseToCenter[0].multipliedBy(Math.log(zoom)));
     camera[1] = camera[1].minus(mouseToCenter[1].multipliedBy(Math.log(zoom)));
     camera[2] *= zoom;
-    drawScreen(gl, programInfo, camera, [canvas.clientWidth, canvas.clientHeight], 1000);
+    draw(gl, programInfo, camera, [canvas.clientWidth, canvas.clientHeight], SET_ITERATIONS);
   });
 }
 
-function drawScreen(gl, programInfo, camera, screen, iterations) {
+function draw(gl, programInfo, camera, screen, iterations) {
   gl.clear(gl.COLOR_BUFFER_BIT);
+
+  let centerIterations = getIterations([camera[0], camera[1]], iterations);
+  gl.bindTexture(gl.TEXTURE_2D, programInfo.iterationsTex);
+  gl.texSubImage2D(
+    gl.TEXTURE_2D,
+    0,
+    0,
+    0,
+    iterations+1,
+    1,
+    gl.RG,
+    gl.FLOAT,
+    new Float32Array(centerIterations.flat())
+  )
 
   gl.uniform3fv(programInfo.uniformLocations.camera, camera);
   gl.uniform2iv(programInfo.uniformLocations.screen, screen);
@@ -128,9 +152,4 @@ function initShaderProgram(gl, vsSource, fsSource) {
   }
 
   return program;
-}
-
-function draw(gl, programInfo, buffers) {
-  gl.clear(gl.COLOR_BUFFER_BIT);
-
 }
