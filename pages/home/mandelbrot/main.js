@@ -1,4 +1,5 @@
 import { shaders } from "./shaders.js";
+import BigNumber from "https://cdn.jsdelivr.net/npm/bignumber.js@latest/+esm"
 
 main();
 
@@ -52,18 +53,18 @@ function main() {
 
   gl.useProgram(programInfo.program);
   
-  let camera = [-0.75, 0.0, 1.0];
+  let camera = [new BigNumber(-0.75), new BigNumber(0.0), 1.0];
   drawScreen(gl, programInfo, camera, [canvas.clientWidth, canvas.clientHeight], 1000);
 
   // Set up inputs
-  let mouseCenter = [0.0, 0.0];
+  let mouseCenter = [new BigNumber(0.0), new BigNumber(0.0)];
   canvas.addEventListener("mousemove", (e) => {
     const x = e.offsetX;
     const y = e.offsetY;
 
     const centerRelative = [x - canvas.clientWidth/2, -1*(y - canvas.clientHeight/2)];
-    const windowSize = [2*canvas.clientWidth/(camera[2]*canvas.clientHeight), 2*canvas.clientHeight/(camera[2]*canvas.clientHeight)]
-    const mouseGraphPos = [camera[0] + (windowSize[0] * centerRelative[0] / canvas.clientHeight), camera[1] + (windowSize[1] * centerRelative[1] / canvas.clientHeight)];
+    const windowSize = [new BigNumber(canvas.clientWidth).dividedBy(camera[2]*canvas.clientHeight/2), new BigNumber(canvas.clientHeight).dividedBy(camera[2]*canvas.clientHeight/2)]
+    const mouseGraphPos = [camera[0].plus(windowSize[0].multipliedBy(centerRelative[0] / canvas.clientHeight)), camera[1].plus(windowSize[1].multipliedBy(centerRelative[1] / canvas.clientHeight))];
 
     mouseCenter = mouseGraphPos;
   });
@@ -71,11 +72,11 @@ function main() {
     e.preventDefault();
 
     const dY = e.deltaY;
-    const mouseToCenter = [camera[0] - mouseCenter[0], camera[1] - mouseCenter[1]];
+    const mouseToCenter = [camera[0].minus(mouseCenter[0]), camera[1].minus(mouseCenter[1])];
     const zoom = Math.exp(-dY/500)
 
-    camera[0] -= mouseToCenter[0] * Math.log(zoom);
-    camera[1] -= mouseToCenter[1] * Math.log(zoom);
+    camera[0] = camera[0].minus(mouseToCenter[0].multipliedBy(Math.log(zoom)));
+    camera[1] = camera[1].minus(mouseToCenter[1].multipliedBy(Math.log(zoom)));
     camera[2] *= zoom;
     drawScreen(gl, programInfo, camera, [canvas.clientWidth, canvas.clientHeight], 1000);
   });
